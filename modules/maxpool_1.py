@@ -1,7 +1,6 @@
 import cv2
 import numpy as np
 
-
 class simplemaxpool():
   def __init__(self,image,stride):
       self.image = cv2.imread(image)
@@ -13,19 +12,13 @@ class simplemaxpool():
       except:
           return False
       return True
-
-  def newdim(self,n):
-      if n % self.stride == 0:
-          return int (n / self.stride)
-      else:
-          return int(n // self.stride + 1)
-
+    
   def max_pool_area(self,x,y,arr):
-      q = np.array(1)
+      q = []
       for i in range(self.stride):
         for j in range(self.stride):
           if self.isInBounds(i+x,j+y,arr):
-              q = np.append(q,arr[i+x][j+y])
+              q.append(arr[i+x][j+y])
           else:
               continue
       return np.amax(q)        
@@ -33,19 +26,13 @@ class simplemaxpool():
   def MaxPool2D(self):      
     height = self.image.shape[0]
     width = self.image.shape[1]
-
-    red = np.zeros((height,width))
-    green = np.zeros((height,width))
-    blue = np.zeros((height,width))
-
-    for i in range(height):
-        for j in range(width):
-            red[i][j] = self.image[i][j][0]
-            green[i][j] = self.image[i][j][1]
-            blue[i][j] = self.image[i][j][2]
-
-    newHeight = self.newdim(height)
-    newWidth = self.newdim(width)
+    
+    red = img[:,:,0]
+    green = img[:,:,1]
+    blue = img[:,:,2]
+    
+    newHeight = math.ceil(height / self.stride)
+    newWidth = math.ceil(width / self.stride)
 
     maximg = np.zeros((newHeight,newWidth,3),dtype=np.uint8)
     for k in range(0,height,self.stride):
@@ -57,7 +44,3 @@ class simplemaxpool():
             maximg[newk][newl][2] = self.max_pool_area(k,l,blue)
 
     return maximg
-
-
-        
-    
