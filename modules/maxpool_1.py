@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+import math
 
 class simplemaxpool():
   def __init__(self,image,stride):
