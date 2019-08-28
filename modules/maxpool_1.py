@@ -28,9 +28,9 @@ class simplemaxpool():
     height = self.image.shape[0]
     width = self.image.shape[1]
     
-    red = img[:,:,0]
-    green = img[:,:,1]
-    blue = img[:,:,2]
+    red = self.image[:,:,0]
+    green = self.image[:,:,1]
+    blue = self.image[:,:,2]
     
     newHeight = math.ceil(height / self.stride)
     newWidth = math.ceil(width / self.stride)
