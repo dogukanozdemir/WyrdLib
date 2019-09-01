@@ -7,7 +7,7 @@ import datetime
 class simplemaxpool():
   
   def __init__(self,image,verbose=1):
-    self.image = cv2.imread(image)
+    self.image = image
     self.verbose = verbose
 
   def isInBounds(self,x,y,arr):
