@@ -61,7 +61,7 @@ class ConvFilter:
                 'emboss' : emboss}
   
   def __init__(self,image,verbose=1):
-    self.image = cv2.imread(image)
+    self.image = image
     self.verbose = verbose
   
   def isInBounds(self,x,y,arr):
@@ -115,6 +115,5 @@ class ConvFilter:
     if self.verbose == 1:
       print("It took {0} for the filter '{1}' to complete transformation"
             .format(datetime.timedelta(seconds=end-start),
-                    ktype))
-            
+                    ktype))           
     return filtered_image
