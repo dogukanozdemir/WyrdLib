@@ -112,7 +112,7 @@ class ConvFilter:
         filtered_image[k][l][1] = self.kernel_area(k,l,green)
         filtered_image[k][l][2] = self.kernel_area(k,l,blue)
     end = time.time()
-    if verbose == 1:
+    if self.verbose == 1:
       print("It took {0} for the filter '{1}' to complete transformation"
             .format(datetime.timedelta(seconds=end-start),
                     ktype)
