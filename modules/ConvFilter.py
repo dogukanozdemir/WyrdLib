@@ -115,6 +115,6 @@ class ConvFilter:
     if self.verbose == 1:
       print("It took {0} for the filter '{1}' to complete transformation"
             .format(datetime.timedelta(seconds=end-start),
-                    ktype)
+                    ktype))
             
     return filtered_image
