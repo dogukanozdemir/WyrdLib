@@ -1,14 +1,14 @@
 import cv2
 import numpy as np
 import math
+import time
+import datetime
 
 class simplemaxpool():
   
-  def __init__(self,image,strides=(3,3)):
+  def __init__(self,image,verbose=1):
     self.image = cv2.imread(image)
-    self.strideX = strides[0]
-    self.strideY = strides[1]
-    
+    self.verbose = verbose
 
   def isInBounds(self,x,y,arr):
     try:
@@ -26,7 +26,10 @@ class simplemaxpool():
           continue
     return np.amax(q)        
 
-  def MaxPool2D(self):      
+  def MaxPool2D(self,strides=(3,3)):
+    start = time.time()
+    self.strideX = strides[0]
+    self.strideY = strides[1]
     height = self.image.shape[0]
     width = self.image.shape[1]
     
@@ -45,5 +48,10 @@ class simplemaxpool():
         maximg[newk][newl][0] = self.max_pool_area(k,l,red)
         maximg[newk][newl][1] = self.max_pool_area(k,l,green)
         maximg[newk][newl][2] = self.max_pool_area(k,l,blue)
-        
+    end = time.time()
+    
+    if self.verbose == 1:
+      print("It took {0} for a stride of {1} to complete maxpooling.".
+            format(datetime.timedelta(seconds=end-start),
+                   strides))
     return maximg
