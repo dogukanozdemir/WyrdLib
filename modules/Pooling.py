@@ -4,10 +4,9 @@ import math
 import time
 import datetime
 
-class simplemaxpool():
+class simplepooling():
   
-  def __init__(self,image,verbose=1):
-    self.image = image
+  def __init__(self,verbose=1):
     self.verbose = verbose
 
   def isInBounds(self,x,y,arr):
@@ -17,25 +16,26 @@ class simplemaxpool():
         return False
     return True
   def max_pool_area(self,x,y,arr):
-    q = []
-    for i in range(self.strideX):
-      for j in range(self.strideY):
-        if self.isInBounds(i+x,j+y,arr):
-          q.append(arr[i+x][j+y])
-        else:
-          continue
-    return np.amax(q)        
-
-  def MaxPool2D(self,strides=(3,3)):
+    if self.pooling_type == 'max':
+      return np.amax(arr[x:x+self.strideX,y:y+self.strideY]) 
+    elif self.pooling_type == 'average':
+      return np.average(arr[x:x+self.strideX,y:y+self.strideY])
+    else:
+      raise TypeError("The pooling type '" + str(self.pooling_type) + "' does not exist.\nEither use 'max' or 'average'")
+      
+  def MaxPool2D(self,image,pooling_type,kernel_size=(3,3)):
     start = time.time()
-    self.strideX = strides[0]
-    self.strideY = strides[1]
-    height = self.image.shape[0]
-    width = self.image.shape[1]
+    self.pooling_type = pooling_type
     
-    red = self.image[:,:,0]
-    green = self.image[:,:,1]
-    blue = self.image[:,:,2]
+    self.strideX = kernel_size[0]
+    self.strideY = kernel_size[1]
+    
+    height = image.shape[0]
+    width = image.shape[1]
+    
+    red = image[:,:,0]
+    green = image[:,:,1]
+    blue = image[:,:,2]
     
     newHeight = math.ceil(height / self.strideX)
     newWidth = math.ceil(width / self.strideY)
@@ -51,7 +51,7 @@ class simplemaxpool():
     end = time.time()
     
     if self.verbose == 1:
-      print("It took {0} for a stride of {1} to complete maxpooling.".
+      print("It took {0} for a kernel of {1} to complete {2}-pooling.".
             format(datetime.timedelta(seconds=end-start),
-                   strides))
+                   kernel_size,self.pooling_type))
     return maximg
