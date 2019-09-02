@@ -4,7 +4,7 @@ import math
 import time
 import datetime
 
-class simplepooling():
+class Pooling():
   
   def __init__(self,verbose=1):
     self.verbose = verbose
@@ -23,7 +23,7 @@ class simplepooling():
     else:
       raise TypeError("The pooling type '" + str(self.pooling_type) + "' does not exist.\nEither use 'max' or 'average'")
       
-  def MaxPool2D(self,image,pooling_type,kernel_size=(3,3)):
+  def Pool2D(self,image,pooling_type,kernel_size=(3,3)):
     start = time.time()
     self.pooling_type = pooling_type
     
