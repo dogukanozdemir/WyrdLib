@@ -2,7 +2,7 @@ import numpy as np
 import cv2
 import time
 import datetime
-class ConvFilter:
+class ConvFilter():
   
   edge1 = np.array([[1,0,-1],
                     [0,0,0],
@@ -16,9 +16,9 @@ class ConvFilter:
                         [-1,8,-1],
                         [-1,-1,-1]])
   
-  sharpen = np.array([[0,-1,0],
-                      [-1,5,-1],
-                      [0,-1,0]])
+  sharpen = np.array([[0 ,-1,0],
+                      [-1, 5,-1],
+                      [0 ,-1,0]])
   
   gblur= np.array([[0.0625,0.125,0.0625],
                    [0.125, 0.25, 0.125],
@@ -60,8 +60,7 @@ class ConvFilter:
                 'tsobel' : tsobel,
                 'emboss' : emboss}
   
-  def __init__(self,image,verbose=1):
-    self.image = image
+  def __init__(self,verbose=1):
     self.verbose = verbose
   
   def isInBounds(self,x,y,arr):
@@ -89,7 +88,7 @@ class ConvFilter:
       
     return kernel_res
   
-  def transfrom(self,ktype):
+  def transform(self,image,ktype):
     start = time.time()
     if ktype not in self.__class__.filter_dict:
       raise TypeError("The filter '" + str(ktype) + "' does not exist.")
@@ -98,12 +97,12 @@ class ConvFilter:
       self.kernelh = len(self.kernel_matrix[0])
       self.kernelw = len(self.kernel_matrix[1])
       
-    red = self.image[:,:,0]
-    green = self.image[:,:,1]
-    blue = self.image[:,:,2]
+    red = image[:,:,0]
+    green = image[:,:,1]
+    blue = image[:,:,2]
     
-    height = self.image.shape[0]
-    width = self.image.shape[1]
+    height = image.shape[0]
+    width = image.shape[1]
     
     filtered_image = np.zeros((height,width,3),dtype=np.uint8)
     for k in range(height):
