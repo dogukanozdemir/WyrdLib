@@ -2,6 +2,7 @@ import numpy as np
 import cv2
 import time
 import datetime
+from keras import layers
 class ConvFilter():
   
   edge1 = np.array([[1,0,-1],
@@ -63,6 +64,11 @@ class ConvFilter():
   def __init__(self,verbose=1):
     self.verbose = verbose
   
+  def pad_with(vector, pad_width, iaxis, kwargs):
+    pad_value = kwargs.get('padder', 0)
+    vector[:pad_width[0]] = pad_value
+    vector[-pad_width[1]:] = pad_value
+
   def isInBounds(self,x,y,arr):
     if x >= 0 and y >= 0:
       try:
@@ -88,7 +94,8 @@ class ConvFilter():
       
     return kernel_res
   
-  def transform(self,image,ktype):
+  def transform(self,image,padding,ktype):
+    """padding = 'same' or 'valid' """
     start = time.time()
     if ktype not in self.__class__.filter_dict:
       raise TypeError("The filter '" + str(ktype) + "' does not exist.")
@@ -104,7 +111,12 @@ class ConvFilter():
     height = image.shape[0]
     width = image.shape[1]
     
+    if padding = 'same':
+      pass
+    elif padding = 'valid':
+      pass
     filtered_image = np.zeros((height,width,3),dtype=np.uint8)
+    #np.pad(a, 2, pad_with)
     for k in range(height):
       for l in range(width):
         filtered_image[k][l][0] = self.kernel_area(k,l,red)
