@@ -103,12 +103,13 @@ class ConvFilter():
     if starth < 0:
       starth = 0
 
-    image_kernel = arr[i:x+self.kernelw-1,j:y+self.kernelh-1]
-    image_kernel = np.pad(image_kernel,self.kernel_matrix.shape[0] , pad_with)
+    image_kernel = arr[startw:x+self.kernelw-1,starth:y+self.kernelh-1]
+    image_kernel = np.pad(image_kernel,self.kernel_matrix.shape[0] , self.pad_with)
+    print(image_kernel)
     return sum(sum(image_kernel * self.kernel_matrix))
   
   
-  def transform(self,image,padding,ktype):
+  def transform(self,image,ktype):
     """padding = 'same' or 'valid' """
     start = time.time()
     if ktype not in self.__class__.filter_dict:
@@ -125,14 +126,6 @@ class ConvFilter():
     height = image.shape[0]
     width = image.shape[1]
     
-    if padding == 'same':
-      pass
-    elif padding == 'valid':
-      pass
-
-    filtered_image = np.zeros((height,width,3),dtype=np.uint8)
-    #np.pad(a, 2, pad_with)
-   # filtered_image = np.zeros((height,width,3),dtype=np.uint8)
     for k in range(height):
       for l in range(width):
         image[k][l][0] = self.new_kernel(k,l,red)
