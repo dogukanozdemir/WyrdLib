@@ -2,7 +2,7 @@ import numpy as np
 import cv2
 import time
 import datetime
-class ConvFilter():
+class ConvKernel():
   
   edge1 = np.array([[1,0,-1],
                     [0,0,0],
@@ -88,6 +88,18 @@ class ConvFilter():
       
     return kernel_res
   
+  def new_kernel(self,x,y,arr):
+    startw = x-1
+    starth = y-1 
+    if startw < 0:
+      startw = 0
+    if starth < 0:
+      starth = 0
+    
+    image_kernel = arr[i:x+self.kernelw-1,j:y+self.kernelh-1]
+    return sum(sum(image_kernel * self.kernel_matrix))
+  
+  
   def transform(self,image,ktype):
     start = time.time()
     if ktype not in self.__class__.filter_dict:
@@ -104,15 +116,15 @@ class ConvFilter():
     height = image.shape[0]
     width = image.shape[1]
     
-    filtered_image = np.zeros((height,width,3),dtype=np.uint8)
+   # filtered_image = np.zeros((height,width,3),dtype=np.uint8)
     for k in range(height):
       for l in range(width):
-        filtered_image[k][l][0] = self.kernel_area(k,l,red)
-        filtered_image[k][l][1] = self.kernel_area(k,l,green)
-        filtered_image[k][l][2] = self.kernel_area(k,l,blue)
+        image[k][l][0] = self.new_kernel(k,l,red)
+        image[k][l][1] = self.new_kernel(k,l,green)
+        image[k][l][2] = self.new_kernel(k,l,blue)
     end = time.time()
     if self.verbose == 1:
       print("It took {0} for the filter '{1}' to complete transformation"
             .format(datetime.timedelta(seconds=end-start),
                     ktype))           
-    return filtered_image
+    return image
