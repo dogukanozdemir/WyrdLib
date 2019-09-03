@@ -103,7 +103,6 @@ class ConvFilter():
     if starth < 0:
       starth = 0
 
-    arr = np.pad(arr,self.kernel_matrix.shape[0], self.pad_with)
     image_kernel = arr[startw:x+self.kernelw-1,starth:y+self.kernelh-1]
     return sum(sum(image_kernel * self.kernel_matrix))
   
@@ -118,6 +117,8 @@ class ConvFilter():
       self.kernelh = len(self.kernel_matrix[0])
       self.kernelw = len(self.kernel_matrix[1])
       
+    image = np.pad(image,self.kernel_matrix.shape[0], self.pad_with)
+
     red = image[:,:,0]
     green = image[:,:,1]
     blue = image[:,:,2]
