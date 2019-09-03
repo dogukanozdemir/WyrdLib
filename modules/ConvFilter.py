@@ -88,6 +88,8 @@ class ConvFilter():
       kernel_res = 0
     elif kernel_res > 255:
       kernel_res = 255
+    
+    return kernel_res
 
   def transform(self,image,ktype):
     start = time.time()
