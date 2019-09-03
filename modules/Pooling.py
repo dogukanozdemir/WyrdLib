@@ -17,18 +17,24 @@ class Pooling():
     return True
   def max_pool_area(self,x,y,arr):
     if self.pooling_type == 'max':
-      return np.amax(arr[x:x+self.strideX,y:y+self.strideY]) 
+      return np.amax(arr[x:x+self.kernelX,y:y+self.kernelY]) 
     elif self.pooling_type == 'average':
-      return np.average(arr[x:x+self.strideX,y:y+self.strideY])
+      return np.average(arr[x:x+self.kernelX,y:y+self.kernelY])
     else:
       raise TypeError("The pooling type '" + str(self.pooling_type) + "' does not exist.\nEither use 'max' or 'average'")
       
-  def Pool2D(self,image,pooling_type,kernel_size=(3,3)):
+  def Pool2D(self,image,pooling_type,kernel_size=(3,3),stride=(3,3)):
     start = time.time()
     self.pooling_type = pooling_type
     
-    self.strideX = kernel_size[0]
-    self.strideY = kernel_size[1]
+    if any(x <= 0 for x in kernel_size) or any(x <= 0 for x in stride):
+      raise TypeError('Neither kernel size nor stride can have a value less than 1')
+      
+    self.strideX = stride[0]
+    self.strideY = stride[1]
+    
+    self.kernelX = kernel_size[0]
+    self.kernelY = kernel_size[1]
     
     height = image.shape[0]
     width = image.shape[1]
@@ -51,7 +57,9 @@ class Pooling():
     end = time.time()
     
     if self.verbose == 1:
-      print("It took {0} for a kernel of {1} to complete {2}-pooling.".
+      print("It took {0} for a kernel of {1} with strides {2} to complete {3}-pooling.".
             format(datetime.timedelta(seconds=end-start),
-                   kernel_size,self.pooling_type))
+                   kernel_size,
+                   stride,
+                   self.pooling_type))
     return maximg
