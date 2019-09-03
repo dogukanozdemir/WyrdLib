@@ -2,12 +2,8 @@ import numpy as np
 import cv2
 import time
 import datetime
-<<<<<<< HEAD
-from keras import layers
+
 class ConvFilter():
-=======
-class ConvKernel():
->>>>>>> 7f09910208dac49b9a31a6b267aa0fd13cfa7ed8
   
   edge1 = np.array([[1,0,-1],
                     [0,0,0],
@@ -129,9 +125,9 @@ class ConvKernel():
     height = image.shape[0]
     width = image.shape[1]
     
-    if padding = 'same':
+    if padding == 'same':
       pass
-    elif padding = 'valid':
+    elif padding == 'valid':
       pass
 
     filtered_image = np.zeros((height,width,3),dtype=np.uint8)
