@@ -114,9 +114,9 @@ class ConvFilter():
     
     for k in range(1,height-1):
       for l in range(1,width-1):
-        image[k][l][0] = self.new_kernel(k,l,red)
-        image[k][l][1] = self.new_kernel(k,l,green)
-        image[k][l][2] = self.new_kernel(k,l,blue)
+        image[k][l][0] = self.kernel_area(k,l,red)
+        image[k][l][1] = self.kernel_area(k,l,green)
+        image[k][l][2] = self.kernel_area(k,l,blue)
     end = time.time()
     if self.verbose == 1:
       print("It took {0} for the filter '{1}' to complete transformation"
