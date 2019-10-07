@@ -39,27 +39,54 @@ class Pooling():
     height = image.shape[0]
     width = image.shape[1]
     
-    red = image[:,:,0]
-    green = image[:,:,1]
-    blue = image[:,:,2]
-    
-    newHeight = math.ceil(height / self.strideX)
-    newWidth = math.ceil(width / self.strideY)
+    try:
+      red = image[:,:,0]
+      green = image[:,:,1]
+      blue = image[:,:,2]
+      
+      newHeight = math.ceil(height / self.strideX)
+      newWidth = math.ceil(width / self.strideY)
 
-    maximg = np.zeros((newHeight,newWidth,3),dtype=np.uint8)
-    for k in range(0,height,self.strideX):
-      for l in range(0,width,self.strideY):
-        newk = int(k / self.strideX)
-        newl = int(l / self.strideY)
-        maximg[newk][newl][0] = self.max_pool_area(k,l,red)
-        maximg[newk][newl][1] = self.max_pool_area(k,l,green)
-        maximg[newk][newl][2] = self.max_pool_area(k,l,blue)
-    end = time.time()
+      maximg = np.zeros((newHeight,newWidth,3),dtype=np.uint8)
+      for k in range(0,height,self.strideX):
+        for l in range(0,width,self.strideY):
+          newk = int(k / self.strideX)
+          newl = int(l / self.strideY)
+          maximg[newk][newl][0] = self.max_pool_area(k,l,red)
+          maximg[newk][newl][1] = self.max_pool_area(k,l,green)
+          maximg[newk][newl][2] = self.max_pool_area(k,l,blue)
+      end = time.time()
+
+      if self.verbose == 1:
+        print("It took {0} for a kernel of {1} with strides {2} to complete {3}-pooling.".
+              format(datetime.timedelta(seconds=end-start),
+                     kernel_size,
+                     stride,
+                     self.pooling_type))
+      return maximg
     
-    if self.verbose == 1:
-      print("It took {0} for a kernel of {1} with strides {2} to complete {3}-pooling.".
-            format(datetime.timedelta(seconds=end-start),
-                   kernel_size,
-                   stride,
-                   self.pooling_type))
-    return maximg
+    except IndexError as e:
+      print("Index Error: ", e)
+      print("Taking Image as one channel image")
+      channel = image[:,:]
+      
+      newHeight = math.ceil(height / self.strideX)
+      newWidth = math.ceil(width / self.strideY)
+
+      maximg = np.zeros((newHeight,newWidth),dtype=np.uint8)
+      for k in range(0,height,self.strideX):
+        for l in range(0,width,self.strideY):
+          newk = int(k / self.strideX)
+          newl = int(l / self.strideY)
+          maximg[newk][newl] = self.max_pool_area(k,l,channel)
+      end = time.time()
+
+      if self.verbose == 1:
+        print("It took {0} for a kernel of {1} with strides {2} to complete {3}-pooling.".
+              format(datetime.timedelta(seconds=end-start),
+                     kernel_size,
+                     stride,
+                     self.pooling_type))
+      return maximg
+      
+
